@@ -1,0 +1,15 @@
+CREATE SCHEMA IF NOT EXISTS app;
+
+CREATE TABLE IF NOT EXISTS app.images (
+  id SERIAL PRIMARY KEY,
+  url VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS app.comments (
+  id SERIAL PRIMARY KEY,
+  image_id INTEGER  REFERENCES app.images(id),
+  name TEXT NOT NULL,
+  message TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);

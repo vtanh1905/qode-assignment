@@ -1,0 +1,32 @@
+{
+  "name": "server",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node build/index.js",
+    "build": "npx tsc",
+    "database:init": "node sql/index.js"
+  },
+  "keywords": [],
+  "author": "vtanh1905@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^5.16.1",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-validator": "^6.15.0",
+    "pg": "^8.10.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.17",
+    "@types/node": "^20.1.2",
+    "@types/pg": "^8.6.6",
+    "prisma": "^5.16.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  }
+}
