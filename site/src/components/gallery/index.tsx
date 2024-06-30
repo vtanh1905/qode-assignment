@@ -1,16 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Input, Button, List, Form, Upload } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 
 import styles from './styles.module.scss';
+import { Image, Comment } from '../../models';
 
-const Gallery = () => {
-  const [comments, setComments] = useState<any>([]);
+interface GalleryProps {
+  images: Image[];
+  onCommentSubmit(comment: Comment): Promise<void>,
+}
+
+const Gallery = ({ images, onCommentSubmit } : GalleryProps) => {
   const [form] = Form.useForm();
 
-  const handleCommentSubmit = (values: any) => {
-    const newComment = `${values.name}: ${values.comment}`;
-    setComments([...comments, newComment]);
+  const handleCommentSubmit = async (value: any) => {
+    await onCommentSubmit(value);
     form.resetFields();
   };
 
@@ -28,11 +32,11 @@ const Gallery = () => {
       </div>
       <List
         itemLayout="vertical"
-        dataSource={imageData}
+        dataSource={images}
         renderItem={(item) => (
           <List.Item>
             <div className={styles['image-wrapper']}>
-              <img src={item.imageUrl} alt={item.title} className={styles['image']} />
+              <img src={item.url} className={styles['image']} />
             </div>
             <div>
               <List
@@ -48,7 +52,7 @@ const Gallery = () => {
                 <Form.Item name="name" rules={[{ required: true, message: 'Please enter your name' }]}>
                   <Input placeholder="Your name" />
                 </Form.Item>
-                <Form.Item name="comment" rules={[{ required: true, message: 'Please enter a comment' }]}>
+                <Form.Item name="message" rules={[{ required: true, message: 'Please enter a comment' }]}>
                   <Input.TextArea placeholder="Leave a comment..." rows={4} />
                 </Form.Item>
                 <Form.Item>
@@ -64,8 +68,3 @@ const Gallery = () => {
 };
 
 export { Gallery };
-
-const imageData = [
-  { imageUrl: 'https://vtanh1905-qode-assignment.s3.ap-southeast-1.amazonaws.com/images/Screenshot+2024-03-04+130235.png', title: 'Image 1', comments: [{ name: 'Nguyen Van A', message: 'Hay qua' }, { name: 'Nguyen Van A', message: 'Lai Qua' }] },
-  { imageUrl: 'https://vtanh1905-qode-assignment.s3.ap-southeast-1.amazonaws.com/images/Screenshot+2024-03-06+095323.png', title: 'Image 2', comments: [{ name: 'Nguyen Van A', message: 'Hay qua' }] },
-];
