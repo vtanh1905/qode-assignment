@@ -1,4 +1,4 @@
-FROM node:18.17.0-alpine3.18
+FROM node:18.17.0
 
 WORKDIR /app
 
@@ -7,6 +7,10 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
+
+RUN npx prisma migrate
+
+RUN npx prisma generate
 
 RUN npm run build
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import useSWR, { useSWRConfig } from 'swr';
 import { Gallery } from '../components';
-import { getData, postData } from '../utils/fetcher';
+import { getData, postData, uploadFile } from '../utils/fetcher';
 import { Comment } from '../models';
 import { API } from '../utils/constants';
 import useSWRMutation from 'swr/mutation';
@@ -20,16 +20,27 @@ const Home = () => {
   }
 
   const onCommentSubmit = async (comment: Comment) => {
-    await trigger({
-      image_id: 1,
-      ...comment,
-    });
-    mutate(API.IMAGES);
+    await trigger(comment);
+    await mutate(API.IMAGES);
   }
+
+  const onUploadFile = async (file: any) => {
+    try {
+      if (!file.type.startsWith('image/')) {
+        alert('Only image files are allowed!');
+        return;
+      }
+  
+      await uploadFile(API.IMAGES, file);
+      await mutate(API.IMAGES);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="App">
-      <Gallery images={images} onCommentSubmit={onCommentSubmit}></Gallery>
+      <Gallery images={images} onCommentSubmit={onCommentSubmit} onUploadFile={onUploadFile}></Gallery>
     </div>
   )
 };

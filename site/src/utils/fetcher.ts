@@ -10,4 +10,14 @@ const postData = async (endPoint: string, { arg }: { arg: any }) => {
     }).then(res => res.json());
 }
 
-export { getData, postData };
+const uploadFile = async (endPoint: string, file: any) => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+   return fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}${endPoint}`, {
+        method: 'POST',
+        body: formData,
+    }).then(res => res.json());
+}
+
+export { getData, postData, uploadFile };

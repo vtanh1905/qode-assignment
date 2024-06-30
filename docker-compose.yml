@@ -12,25 +12,29 @@ services:
     volumes:
     - ./server/sql/schemas.sql:/docker-entrypoint-initdb.d/schemas.sql
     - ./server/sql/seeds.sql:/docker-entrypoint-initdb.d/seeds.sql
-  # server:
-  #   build:
-  #     context: ./server
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - '3001:3001'
-  #   environment:
-  #     - NODE_ENV=production
-  #     - PORT=3001
-  #     - DATABASE_URL=postgresql://postgres:123456@postgres:5432/postgres
-  #     - DATABASE_SSL=false
-  #     - ACCESS_CONTROL_ALLOW_ORIGIN=*
-  #   depends_on:
-  #       - postgres
-  # site:
-  #   build:
-  #     context: ./site
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - '3000:3000'
-  #   environment:
-  #     - NODE_ENV=production
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - '3001:3001'
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      PORT: 3001
+      DATABASE_URL: postgresql://postgres:123456@postgres:5432/postgres?schema=app
+      ACCESS_CONTROL_ALLOW_ORIGIN: ${ACCESS_CONTROL_ALLOW_ORIGIN}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_REGION: ${AWS_REGION}
+      AWS_S3_BUCKET_NAME: ${AWS_S3_BUCKET_NAME}
+    depends_on:
+        - postgres
+  site:
+    build:
+      context: ./site
+      dockerfile: Dockerfile
+    ports:
+      - '80:3000'
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      NEXT_PUBLIC_SERVER_URL: http://server:3001

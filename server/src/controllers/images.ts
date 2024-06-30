@@ -1,6 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express'
-
+import multer from 'multer'
 import { ImageService } from '../services'
+const upload = multer({ dest: 'uploads/' })
 
 const imagesController: Router = Router()
 
@@ -17,10 +18,13 @@ const getAll = async (req: Request, res: Response, next: NextFunction) => {
 
 const create = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { url } = req.body
+    const file = (req as any).file;
+    if (!file) {
+      return res.status(400).send('No file uploaded');
+    }
 
-    await ImageService.getInstance().insert(url)
-
+    await ImageService.getInstance().insert(file);
+    
     res.json({
       message: 'success'
     })
@@ -30,5 +34,6 @@ const create = async (req: Request, res: Response, next: NextFunction) => {
 }
 
 imagesController.get('/', getAll)
+imagesController.post('/', upload.single('file'), create)
 
 export { imagesController }

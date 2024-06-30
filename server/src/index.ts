@@ -17,7 +17,7 @@ function bootstrap() {
   app.use(bodyParser.json())
   app.use(
     cors({
-      origin: process.env.ACCESS_CONTROL_ALLOW_ORIGIN
+      origin: '*'
     })
   )
 

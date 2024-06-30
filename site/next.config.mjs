@@ -10,6 +10,7 @@ const nextConfig = {
     'rc-pagination',
     'rc-picker'
   ],
+  crossOrigin: 'anonymous',
 };
 
 export default nextConfig;
